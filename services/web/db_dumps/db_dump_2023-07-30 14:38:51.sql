@@ -1,0 +1,4 @@
+-- Table: users
+-- Table: contacts
+-- Table: notifications
+-- Table: users_messages

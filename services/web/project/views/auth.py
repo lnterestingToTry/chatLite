@@ -29,7 +29,7 @@ def login():
                 flash('харош харош', category='success')
                 login_user(user, remember=True)
                 
-                return redirect(url_for('chats.home'))
+                return redirect(url_for('chats.contacts'))
             else:
                 flash('невірний пароль, спробуйте ще раз', category='error')
         else:
@@ -56,6 +56,7 @@ def sign_up():
         password2 = request.form.get('password2')
 
         user = Users.query.filter_by(email=email).first()
+        nickname_filter = Users.query.filter_by(nickname=nickname).first()
 
         if user:
             flash('на даний емейл вже існує зареєстрований користувач', category='error')
@@ -64,6 +65,8 @@ def sign_up():
         elif len(email) > email_maxlength:
             flash('емейл не може бути довшим ' + str(email_maxlength) + ' символів', category='error')
         
+        elif nickname_filter:
+            flash('такий псевдонім вже існує', category='error')
         elif len(nickname) < nickname_minlength:
             flash('псевдонім не може бути коротшим ' + str(nickname_minlength) + ' символів', category='error')
         elif len(nickname) > nickname_maxlength:

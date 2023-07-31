@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %} Contacts{% endblock %}
+
+
+{% block content %}
+
+<script 
+    type="text/javascript"
+    src="{{ url_for('static', filename='notifications.js') }}"
+></script>
+
+
+{{user.nickname}}
+
+
+<input 
+    type="text"
+    class="form-control"
+    id="user_nickname"
+    name="user_nickname"
+    placeholder="почніть вводити псевдонім користувача"
+>
+
+
+<div id="user_search">
+
+</div>
+
+
+<div id="contacts">
+
+</div>
+
+<div id="notifications">
+
+</div>
+
+
+
+<script type="text/javascript">
+    get_users()
+    is_notification()
+</script>
+
+<script 
+    type="text/javascript"
+    src="{{ url_for('static', filename='user_search.js') }}"
+></script>
+
+{% endblock %}
+
+

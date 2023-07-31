@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./services/web
+      dockerfile: Dockerfile.prod
+    command: gunicorn --bind 0.0.0.0:5000 manage:app #python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/web/:/app
+      - static_volume:/home/app/web/project/static
+    # ports:
+    #   - "5001:5000"
+    expose:
+      - 5000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+    
+  db:
+    image: postgres:15.3-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=chatlite_dev
+      - POSTGRES_PASSWORD=strongpassword
+      - POSTGRES_DB=chatlite_db
+    ports:
+      - "5432:5432"
+
+  nginx:
+    build: ./services/nginx
+    volumes:
+      - static_volume:/home/app/web/project/static
+    ports:
+       - "5001:80"
+    depends_on:
+      - web
+
+  ngrok:
+    image: shkoliar/ngrok:latest
+    ports:
+      - 4551:4551
+    links:
+      - web
+    environment:
+      - DOMAIN=web
+      - PORT=5000
+      - AUTH_TOKEN=2OzyzIGBtA4O4gwvXEMqVAIFcjj_7EAtEf4CbFFfNJ2gkr2X9
+    #depends_on:
+    #  - nginx
+
+
+volumes:
+  postgres_data:
+  static_volume:
